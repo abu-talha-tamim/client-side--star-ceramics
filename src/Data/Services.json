@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "icon": "FaTasks",
+        "title": "Task Management",
+        "description": "Track, assign, and update tasks easily."
+    },
+    {
+        "id": 2,
+        "icon": "FaMoneyBillWave",
+        "title": "Payroll Management",
+        "description": "Manage salaries, bonuses, and payments."
+    },
+    {
+        "id": 3,
+        "icon": "FaClock",
+        "title": "Attendance Tracking",
+        "description": "Monitor employee work hours and leaves."
+    },
+    {
+        "id": 4,
+        "icon": "FaFileContract",
+        "title": "Contract Management",
+        "description": "Store and manage employee contracts securely."
+    },
+    {
+        "id": 5,
+        "icon": "FaChartLine",
+        "title": "Performance Analysis",
+        "description": "Evaluate and improve employee productivity."
+    },
+    {
+        "id": 6,
+        "icon": "FaComments",
+        "title": "Internal Communication",
+        "description": "Enhance teamwork with company-wide chat."
+    }
+]
