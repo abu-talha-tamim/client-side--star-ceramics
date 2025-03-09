@@ -34,7 +34,7 @@ const Services = () => {
                 {service.title}
               </h3>
               <p className="mt-4 text-gray-600">{service.description}</p>
-              <button className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+              <button className="btn btn-outline border-0 border-b-4 border-x-1 mt-4 transition duration-300">
                 Learn More
               </button>
             </div>
