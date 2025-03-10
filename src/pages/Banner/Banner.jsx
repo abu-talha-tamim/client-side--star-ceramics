@@ -7,6 +7,13 @@ import img3 from "../../assets/Banner/C3.jpg";
 import img4 from "../../assets/Banner/pexels-fauxels-3184357.jpg";
 
 const Banner = () => {
+  const successMessages = [
+    "Pioneering Innovation Since 1990",
+    "Empowering Success Worldwide",
+    "Transforming Ideas into Reality",
+    "Leading the Market with Excellence",
+  ];
+
   return (
     <div className="w-full mx-auto mt-2">
       <Carousel
@@ -22,7 +29,13 @@ const Banner = () => {
             key={index}
             className="relative w-full h-[50vh] md:h-[60vh] lg:h-[90vh] bg-cover bg-center"
             style={{ backgroundImage: `url(${image})` }}
-          />
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-lg">
+                {successMessages[index]}
+              </h1>
+            </div>
+          </div>
         ))}
       </Carousel>
     </div>
