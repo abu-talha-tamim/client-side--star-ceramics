@@ -12,13 +12,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 px-4 gap-8">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 px-4 gap-8 p-16">
       {/* Login Form Card */}
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6">
         <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">
           Login
         </h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4 p-10">
           {/* Email Field */}
           <div>
             <label htmlFor="email" className="block text-gray-700 font-medium">
