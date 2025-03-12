@@ -1,13 +1,24 @@
 import { Link } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
+import { useContext } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
+
   return (
-    <div className="navbar max-w-screen w-6xl bg-black text-white shadow-sm fixed  z-10 opacity-90">
-      <div className="container mx-auto flex justify-between ">
+    <div className="navbar max-w-screen w-6xl bg-black text-white shadow-sm fixed z-10 opacity-90">
+      <div className="container mx-auto flex justify-between">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold tracking-wide uppercase">
-          STAR -<span className="text-primary font-bold text-xl sty"> T</span> <br />
+          STAR -<span className="text-primary font-bold text-xl"> T</span>{" "}
+          <br />
           <span className="text-gray-400 text-sm">C E R A M I C</span>
         </Link>
 
@@ -22,10 +33,7 @@ const Navbar = () => {
             >
               <AiOutlineMenu size={24} />
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-white text-black rounded-box shadow-md mt-3 w-52 p-2"
-            >
+            <ul className="menu menu-sm dropdown-content bg-white text-black rounded-box shadow-md mt-3 w-52 p-2">
               <li>
                 <Link to="/">Home</Link>
               </li>
@@ -33,14 +41,13 @@ const Navbar = () => {
                 <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
                 <Link to="/register">Register</Link>
               </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              {user && (
+                <li>
+                  <button onClick={handleLogOut}>Logout</button>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -54,27 +61,42 @@ const Navbar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="User Avatar"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={
+                    user?.photoURL ||
+                    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  }
                 />
               </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-white text-black rounded-box shadow-md mt-3 w-52 p-2"
-            >
+            <ul className="menu menu-sm dropdown-content bg-white text-black rounded-box shadow-md mt-3 w-52 p-2">
               <li>
-                <a className="justify-between">
-                  Profile <span className="badge">New</span>
-                </a>
+                <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/settings">Settings</Link>
               </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              {user && (
+                <li>
+                  <button onClick={handleLogOut}>Logout</button>
+                </li>
+              )}
             </ul>
           </div>
+
+          {/* Login/Logout Button */}
+          <ul>
+            {user ? (
+              <li>
+                <button onClick={handleLogOut} className="btn btn-ghost">
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </div>
