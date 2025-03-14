@@ -1,5 +1,5 @@
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Register1 from "../../assets/Logo/Register.jpg";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
@@ -14,37 +14,73 @@ const Register = () => {
     reset,
     formState: { errors },
   } = useForm();
-  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const { createUser, updateUserProfile, signInWithGoogle, signInWithGithub } =
+    useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const [loading, setLoading] = useState(false);
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithGoogle();
+      Swal.fire({
+        icon: "success",
+        title: "Google Login Successful",
+        text: `Welcome, ${result.user?.displayName || "User"}!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate(from);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Google Login Failed",
+        text: error.message,
+      });
+    }
+  };
+
+  const handleGithubLogin = async () => {
+    try {
+      const result = await signInWithGithub();
+      Swal.fire({
+        icon: "success",
+        title: "GitHub Login Successful",
+        text: `Welcome, ${result.user?.displayName || "User"}!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate(from);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "GitHub Login Failed",
+        text: error.message,
+      });
+    }
+  };
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      console.log(data);
       const result = await createUser(data.email, data.password);
-      const loggedUser = result.user;
-
-      console.log(loggedUser);
-
-      // If using Firebase Storage, upload photo and get URL
-      const photoURL = data.photo[0] ? URL.createObjectURL(data.photo[0]) : "";
-
-      await updateUserProfile(data.name, photoURL);
-
-      console.log("User profile updated");
-      reset();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "User created successfully.",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      navigate("/");
+      if (result?.user) {
+        const photoURL = data.photo[0]
+          ? URL.createObjectURL(data.photo[0])
+          : "";
+        await updateUserProfile(data.name, photoURL);
+        reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "User created successfully.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      }
     } catch (error) {
-      console.error("Registration error:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -61,13 +97,11 @@ const Register = () => {
         <title>Star | Register</title>
       </Helmet>
       <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 px-4 gap-8">
-        {/* Registration Form Card */}
         <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6">
           <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">
             Register
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-gray-700 font-medium">
                 Name
@@ -83,7 +117,6 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
               )}
             </div>
-            {/* Email Field */}
             <div>
               <label
                 htmlFor="email"
@@ -102,7 +135,6 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
             </div>
-            {/* Photo Upload Field */}
             <div>
               <label
                 htmlFor="photo"
@@ -121,7 +153,6 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.photo.message}</p>
               )}
             </div>
-            {/* Password Field */}
             <div>
               <label
                 htmlFor="password"
@@ -149,43 +180,27 @@ const Register = () => {
                 </p>
               )}
             </div>
-            {/* Role Dropdown */}
-            <div>
-              <label htmlFor="role" className="block text-gray-700 font-medium">
-                Role
-              </label>
-              <select
-                {...register("role", { required: "Role is required" })}
-                id="role"
-                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <option value="">Select Role</option>
-                <option value="Employee">Employee</option>
-                <option value="HR">HR</option>
-              </select>
-              {errors.role && (
-                <p className="text-red-500 text-sm">{errors.role.message}</p>
-              )}
-            </div>
-            {/* Register Button */}
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
-              >
-                {loading ? "Registering..." : "Register"}
-              </button>
-            </div>
-          </form>
-          {/* Google Login Button */}
-          <div>
-            <button className="w-full border border-gray-300 hover:bg-gray-100 flex items-center justify-center gap-2 py-2 rounded-lg">
-              <FcGoogle size={24} />
-              Continue with Google
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              {loading ? "Registering..." : "Register"}
             </button>
-          </div>
-          {/* Redirect to Login */}
+          </form>
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full border border-gray-300 hover:bg-blue-200 flex items-center justify-center py-2 mt-2 rounded-lg"
+          >
+            <FcGoogle size={24} />
+            Continue with Google
+          </button>
+          <button
+            onClick={handleGithubLogin}
+            className="w-full border border-gray-300 hover:bg-gray-200 flex items-center justify-center py-2 mt-2 rounded-lg"
+          >
+            Continue with GitHub
+          </button>
           <p className="text-center mt-4 text-gray-600">
             Already have an account?{" "}
             <Link
@@ -196,7 +211,6 @@ const Register = () => {
             </Link>
           </p>
         </div>
-        {/* Image Section */}
         <div className="hidden md:block">
           <img
             src={Register1}

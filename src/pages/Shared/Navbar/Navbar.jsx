@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar max-w-screen w-6xl bg-black text-white shadow-sm fixed z-10 opacity-90">
+    <div className="navbar  max-w-screen w-6xl bg-black text-white shadow-sm fixed z-10 opacity-90">
       <div className="container mx-auto flex justify-between">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold tracking-wide uppercase">
@@ -38,7 +38,7 @@ const Navbar = () => {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard/cart">Dashboard</Link>
               </li>
               <li>
                 <Link to="/register">Register</Link>

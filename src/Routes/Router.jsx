@@ -3,6 +3,11 @@ import Main from "../Layout/Main";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Login/Register";
+import Dashboard from "../Layout/Dashboard";
+import Cart from "../pages/Dashboard/Cart/Cart";
+import Employee from "../pages/Dashboard/Employee/Employee";
+import Admin from "../pages/Dashboard/Admin/Admin";
+import Hr from "../pages/Dashboard/HR/hr";
 
 export const router = createBrowserRouter([
   {
@@ -25,4 +30,26 @@ export const router = createBrowserRouter([
         }
     ]
   },
+  {
+    path: 'dashboard',
+    element: <Dashboard/>,
+    children: [
+      {
+        path: 'cart',
+        element: <Cart/>,
+      },
+      {
+        path: 'employee',
+        element: <Employee/>,
+      },
+      {
+        path: 'hr',
+        element: <Hr/>,
+      },
+      {
+        path: 'admin',
+        element: <Admin/>,
+      },
+    ]
+  }
 ]);
