@@ -36,7 +36,7 @@ const Dashboard = () => {
           </li>
 
           {/* Employee Section */}
-          <h3 className="text-sm text-gray-400 uppercase">Employee</h3>
+         
           <li>
             <NavLink
               to="/dashboard/employee"
@@ -51,7 +51,7 @@ const Dashboard = () => {
           </li>
 
           {/* HR Section */}
-          <h3 className="text-sm text-gray-400 uppercase">HR</h3>
+         
           <li>
             <NavLink
               to="/dashboard/hr"
@@ -66,7 +66,7 @@ const Dashboard = () => {
           </li>
 
           {/* Admin Section */}
-          <h3 className="text-sm text-gray-400 uppercase">Admin</h3>
+          
           <li>
             <NavLink
               to="/dashboard/admin"
@@ -81,7 +81,7 @@ const Dashboard = () => {
           </li>
 
           {/* Finance Section */}
-          <h3 className="text-sm text-gray-400 uppercase">Finance</h3>
+          
           <li>
             <NavLink
               to="/dashboard/finance"
@@ -99,7 +99,7 @@ const Dashboard = () => {
           <div className="border-t border-gray-700 my-3"></div>
 
           {/* Reports Section */}
-          <h3 className="text-sm text-gray-400 uppercase">Reports</h3>
+          
           <li>
             <NavLink
               to="/dashboard/reports"

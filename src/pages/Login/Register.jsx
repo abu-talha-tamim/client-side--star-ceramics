@@ -6,6 +6,8 @@ import { Helmet } from "react-helmet";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import { FaGithub } from "react-icons/fa";
+import axios from "axios";
 
 const Register = () => {
   const {
@@ -21,12 +23,13 @@ const Register = () => {
   const from = location.state?.from?.pathname || "/";
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (providerFunction, platformName) => {
+    setLoading(true);
     try {
-      const result = await signInWithGoogle();
+      const result = await providerFunction();
       Swal.fire({
         icon: "success",
-        title: "Google Login Successful",
+        title: `${platformName} Login Successful`,
         text: `Welcome, ${result.user?.displayName || "User"}!`,
         timer: 2000,
         showConfirmButton: false,
@@ -35,51 +38,40 @@ const Register = () => {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Google Login Failed",
+        title: `${platformName} Login Failed`,
         text: error.message,
       });
-    }
-  };
-
-  const handleGithubLogin = async () => {
-    try {
-      const result = await signInWithGithub();
-      Swal.fire({
-        icon: "success",
-        title: "GitHub Login Successful",
-        text: `Welcome, ${result.user?.displayName || "User"}!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      navigate(from);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "GitHub Login Failed",
-        text: error.message,
-      });
+    } finally {
+      setLoading(false);
     }
   };
 
   const onSubmit = async (data) => {
     setLoading(true);
+    const photoURL = data.photo[0] ? URL.createObjectURL(data.photo[0]) : "";
+    const userData = {
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      bank_account_no: data.bank_account_no,
+      salary: Number(data.salary),
+      designation: data.designation,
+      photo: photoURL,
+      registeredAt: new Date().toISOString(),
+    };
     try {
-      const result = await createUser(data.email, data.password);
-      if (result?.user) {
-        const photoURL = data.photo[0]
-          ? URL.createObjectURL(data.photo[0])
-          : "";
-        await updateUserProfile(data.name, photoURL);
-        reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "User created successfully.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/");
-      }
+      await createUser(data.email, data.password);
+      await axios.post("http://localhost:5000/users", userData);
+      await updateUserProfile(data.name, photoURL);
+      reset();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "User created successfully.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -119,6 +111,41 @@ const Register = () => {
             </div>
             <div>
               <label
+                htmlFor="password"
+                className="block text-gray-700 font-medium"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                id="password"
+                placeholder="Enter your password"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <select
+              {...register("role", { required: true })}
+              className="w-full p-2 border rounded"
+            >
+              <option value="Employee">Employee</option>
+              <option value="HR">HR</option>
+            </select>
+
+            <div>
+              <label
                 htmlFor="email"
                 className="block text-gray-700 font-medium"
               >
@@ -135,6 +162,41 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
             </div>
+
+            <div>
+              <label
+                htmlFor="bank_account_no"
+                className="block text-gray-700 font-medium"
+              >
+                Bank Account Number
+              </label>
+              <input
+                type="text"
+                {...register("bank_account_no", {
+                  required: "Bank account number is required",
+                })}
+                id="bank_account_no"
+                placeholder="Enter your bank account number"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="salary"
+                className="block text-gray-700 font-medium"
+              >
+                Salary
+              </label>
+              <input
+                type="number"
+                {...register("salary", { required: "Salary is required" })}
+                id="salary"
+                placeholder="Enter your salary"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="photo"
@@ -145,41 +207,31 @@ const Register = () => {
               <input
                 type="file"
                 {...register("photo", { required: "Photo is required" })}
-                id="photo"
                 accept="image/*"
-                className="mt-1 w-full"
               />
               {errors.photo && (
                 <p className="text-red-500 text-sm">{errors.photo.message}</p>
               )}
             </div>
+
             <div>
               <label
-                htmlFor="password"
+                htmlFor="designation"
                 className="block text-gray-700 font-medium"
               >
-                Password
+                Designation
               </label>
               <input
-                type="password"
-                {...register("password", {
-                  required: "Password is required",
-                  pattern: {
-                    value: /^(?=.*[A-Z])(?=.*[!@#$&*]).{6,}$/,
-                    message:
-                      "Password must be at least 6 characters, include one capital letter and one special character.",
-                  },
+                type="text"
+                {...register("designation", {
+                  required: "Designation is required",
                 })}
-                id="password"
-                placeholder="Enter your password"
+                id="designation"
+                placeholder="Enter your designation"
                 className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
-              {errors.password && (
-                <p className="text-red-500 text-sm">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -187,29 +239,33 @@ const Register = () => {
             >
               {loading ? "Registering..." : "Register"}
             </button>
-          </form>
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full border border-gray-300 hover:bg-blue-200 flex items-center justify-center py-2 mt-2 rounded-lg"
-          >
-            <FcGoogle size={24} />
-            Continue with Google
-          </button>
-          <button
-            onClick={handleGithubLogin}
-            className="w-full border border-gray-300 hover:bg-gray-200 flex items-center justify-center py-2 mt-2 rounded-lg"
-          >
-            Continue with GitHub
-          </button>
-          <p className="text-center mt-4 text-gray-600">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-blue-600 font-semibold hover:underline"
+
+            <button
+              type="button"
+              onClick={() => handleSocialLogin(signInWithGoogle, "Google")}
+              className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-2 mt-4 hover:bg-gray-100"
             >
-              Login here
-            </Link>
-          </p>
+              <FcGoogle size={24} /> Sign up with Google
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSocialLogin(signInWithGithub, "GitHub")}
+              className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-2 mt-2 hover:bg-gray-100"
+            >
+              <FaGithub size={24} /> Sign up with GitHub
+            </button>
+
+            <p className="text-center mt-4 text-gray-600">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-blue-600 font-semibold hover:underline"
+              >
+                Login here
+              </Link>
+            </p>
+          </form>
         </div>
         <div className="hidden md:block">
           <img

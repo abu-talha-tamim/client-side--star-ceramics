@@ -8,6 +8,8 @@ import Cart from "../pages/Dashboard/Cart/Cart";
 import Employee from "../pages/Dashboard/Employee/Employee";
 import Admin from "../pages/Dashboard/Admin/Admin";
 import Hr from "../pages/Dashboard/HR/hr";
+import Finance from "../pages/Dashboard/Finance/Finance";
+import Reports from "../pages/Dashboard/Reports/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ export const router = createBrowserRouter([
       {
         path: 'admin',
         element: <Admin/>,
+      },
+      {
+        path: 'finance',
+        element: <Finance/>,
+      },
+      {
+        path: 'reports',
+        element: <Reports/>,
       },
     ]
   }

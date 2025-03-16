@@ -30,7 +30,7 @@ const Employee = () => {
     const newEntry = {
       task,
       hours,
-      date: date.toISOString(), // Send date as ISO string
+      date: date.toISOString(), 
     };
 
     if (editLog) {
@@ -99,7 +99,7 @@ const Employee = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+      <h2 className="text-3xl font-bold mb-6 mx-auto text-center border-amber-100 border-y-4 py-4 lg:w-8/12 text-gray-400">
         Employee Work Tracker
       </h2>
 
