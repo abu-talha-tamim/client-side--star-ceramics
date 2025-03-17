@@ -6,13 +6,14 @@ import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hook/useAxiosPublic";
 
 const Login = () => {
   const { signIn, signInWithGoogle, signInWithGithub } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const axiosPublic = useAxiosPublic();
   const from = location.state?.from?.pathname || "/";
 
   const handleLogin = async (e) => {
@@ -43,44 +44,49 @@ const Login = () => {
     }
   };
 
-  // Google Login
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (providerFunction, platformName) => {
     try {
-      const result = await signInWithGoogle();
-      Swal.fire({
-        icon: "success",
-        title: "Google Login Successful",
-        text: `Welcome, ${result.user.displayName || "User"}!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      navigate(from);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Google Login Failed",
-        text: error.message,
-      });
-    }
-  };
+      const result = await providerFunction();
+      const user = result?.user;
+      if (!user || !user.email) {
+        throw new Error(`${platformName} login failed. No user data received.`);
+      }
 
-  // GitHub Login
-  const handleGithubLogin = async () => {
-    try {
-      const result = await signInWithGithub();
-      Swal.fire({
-        icon: "success",
-        title: "GitHub Login Successful",
-        text: `Welcome, ${result.user.displayName || "User"}!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      navigate(from);
+      // Prepare user data
+      const userInfo = {
+        email: user.email,
+        name: user.displayName || "Anonymous User",
+        photo: user.photoURL || "default-photo-url",
+        role: "Employee",
+        salary: 0,
+        bank_account_no: "N/A",
+        designation: "N/A",
+        registeredAt: new Date().toISOString(),
+      };
+
+      // Send user data to the database, avoid duplicate entry
+      const response = await axiosPublic.post("/users", userInfo);
+      if (response.data?.insertedId || response.data?.exists) {
+        Swal.fire({
+          icon: "success",
+          title: `${platformName} Login Successful`,
+          text: `Welcome, ${userInfo.name}!`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        navigate(from);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Database Error",
+          text: "Failed to store user data.",
+        });
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "GitHub Login Failed",
-        text: error.message,
+        title: `${platformName} Login Failed`,
+        text: error.message || "An error occurred.",
       });
     }
   };
@@ -91,13 +97,11 @@ const Login = () => {
         <title>Star-T | Login</title>
       </Helmet>
       <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 px-4 gap-8 p-16">
-        {/* Login Form Card */}
         <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6">
           <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">
             Login
           </h1>
           <form onSubmit={handleLogin} className="space-y-4 p-10">
-            {/* Email Field */}
             <div>
               <label className="block text-gray-700 font-medium">Email</label>
               <input
@@ -108,7 +112,6 @@ const Login = () => {
                 required
               />
             </div>
-            {/* Password Field */}
             <div>
               <label className="block text-gray-700 font-medium">
                 Password
@@ -121,7 +124,6 @@ const Login = () => {
                 required
               />
             </div>
-            {/* Login Button */}
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
@@ -130,10 +132,9 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Social Login Buttons */}
           <div className="space-y-4 mt-4">
             <button
-              onClick={handleGoogleLogin}
+              onClick={() => handleSocialLogin(signInWithGoogle, "Google")}
               className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 hover:bg-gray-100 py-2 rounded-full shadow-md transition"
             >
               <FcGoogle size={24} />
@@ -143,7 +144,7 @@ const Login = () => {
             </button>
 
             <button
-              onClick={handleGithubLogin}
+              onClick={() => handleSocialLogin(signInWithGithub, "GitHub")}
               className="w-full flex items-center justify-center gap-2 bg-black text-white py-2 rounded-full shadow-md transition hover:bg-gray-800"
             >
               <FaGithub size={24} />
@@ -151,7 +152,6 @@ const Login = () => {
             </button>
           </div>
 
-          {/* Redirect to Register */}
           <p className="text-center mt-4 text-gray-600">
             Don't have an account?{" "}
             <Link
@@ -163,7 +163,6 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Image Section (KEPT AS YOU WANTED) */}
         <div className="hidden md:block">
           <img
             src={login1}

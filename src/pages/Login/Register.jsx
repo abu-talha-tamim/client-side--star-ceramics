@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import { FaGithub } from "react-icons/fa";
-import axios from "axios";
+import useAxiosPublic from "../../hook/useAxiosPublic";
 
 const Register = () => {
   const {
@@ -22,24 +22,67 @@ const Register = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [loading, setLoading] = useState(false);
+  const axiosPublic = useAxiosPublic();
+
+  const uploadImageToImgbb = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_IMGBB_API_KEY
+      }`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    return data?.data?.url || "";
+  };
 
   const handleSocialLogin = async (providerFunction, platformName) => {
     setLoading(true);
     try {
-      const result = await providerFunction();
-      Swal.fire({
-        icon: "success",
-        title: `${platformName} Login Successful`,
-        text: `Welcome, ${result.user?.displayName || "User"}!`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      navigate(from);
+      const userCredential = await providerFunction();
+      const user = userCredential?.user;
+      if (!user || !user.email) {
+        throw new Error("Missing user information");
+      }
+      const userInfo = {
+        email: user.email,
+        name: user.displayName || "Anonymous User",
+        photo: user.photoURL || "default-photo-url",
+        role: "Employee",
+        salary: 0,
+        bank_account_no: "N/A",
+        designation: "N/A",
+        registeredAt: new Date().toISOString(),
+      };
+
+      const response = await axiosPublic.post("/users", userInfo);
+      if (response.data?.insertedId) {
+        Swal.fire({
+          icon: "success",
+          title: `${platformName} Login Successful`,
+          text: `Welcome, ${userInfo.name}!`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        navigate(from);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Database Error",
+          text: response.data?.message || "Failed to store user data.",
+        });
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: `${platformName} Login Failed`,
-        text: error.message,
+        text: error.message || "An error occurred.",
       });
     } finally {
       setLoading(false);
@@ -48,20 +91,29 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    const photoURL = data.photo[0] ? URL.createObjectURL(data.photo[0]) : "";
-    const userData = {
-      name: data.name,
-      email: data.email,
-      role: data.role,
-      bank_account_no: data.bank_account_no,
-      salary: Number(data.salary),
-      designation: data.designation,
-      photo: photoURL,
-      registeredAt: new Date().toISOString(),
-    };
     try {
-      await createUser(data.email, data.password);
-      await axios.post("http://localhost:5000/users", userData);
+      const photoURL = data.photo?.[0]
+        ? await uploadImageToImgbb(data.photo[0])
+        : "";
+      const userData = {
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        bank_account_no: data.bank_account_no,
+        salary: Number(data.salary),
+        designation: data.designation,
+        photo: photoURL,
+        registeredAt: new Date().toISOString(),
+      };
+
+      const userCredential = await createUser(data.email, data.password);
+      if (!userCredential) {
+        throw new Error("User creation failed");
+      }
+      const response = await axiosPublic.post("/users", userData);
+      if (!response.data?.insertedId) {
+        throw new Error("Failed to insert user in database");
+      }
       await updateUserProfile(data.name, photoURL);
       reset();
       Swal.fire({
@@ -73,11 +125,7 @@ const Register = () => {
       });
       navigate("/");
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.message,
-      });
+      Swal.fire({ icon: "error", title: "Oops...", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -110,93 +158,18 @@ const Register = () => {
               )}
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-gray-700 font-medium"
-              >
-                Password
+              <label htmlFor="role" className="block text-gray-700 font-medium">
+                Role
               </label>
-              <input
-                type="password"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
-                id="password"
-                placeholder="Enter your password"
+              <select
+                {...register("role")}
+                id="role"
                 className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <select
-              {...register("role", { required: true })}
-              className="w-full p-2 border rounded"
-            >
-              <option value="Employee">Employee</option>
-              <option value="HR">HR</option>
-            </select>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-gray-700 font-medium"
               >
-                Email
-              </label>
-              <input
-                type="email"
-                {...register("email", { required: "Email is required" })}
-                id="email"
-                placeholder="Enter your email"
-                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-              )}
+                <option value="Employee">Employee</option>
+                <option value="HR">HR</option>
+              </select>
             </div>
-
-            <div>
-              <label
-                htmlFor="bank_account_no"
-                className="block text-gray-700 font-medium"
-              >
-                Bank Account Number
-              </label>
-              <input
-                type="text"
-                {...register("bank_account_no", {
-                  required: "Bank account number is required",
-                })}
-                id="bank_account_no"
-                placeholder="Enter your bank account number"
-                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="salary"
-                className="block text-gray-700 font-medium"
-              >
-                Salary
-              </label>
-              <input
-                type="number"
-                {...register("salary", { required: "Salary is required" })}
-                id="salary"
-                placeholder="Enter your salary"
-                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-            </div>
-
             <div>
               <label
                 htmlFor="photo"
@@ -206,32 +179,11 @@ const Register = () => {
               </label>
               <input
                 type="file"
-                {...register("photo", { required: "Photo is required" })}
-                accept="image/*"
-              />
-              {errors.photo && (
-                <p className="text-red-500 text-sm">{errors.photo.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="designation"
-                className="block text-gray-700 font-medium"
-              >
-                Designation
-              </label>
-              <input
-                type="text"
-                {...register("designation", {
-                  required: "Designation is required",
-                })}
-                id="designation"
-                placeholder="Enter your designation"
+                {...register("photo")}
+                id="photo"
                 className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
-
             <button
               type="submit"
               disabled={loading}
@@ -239,7 +191,6 @@ const Register = () => {
             >
               {loading ? "Registering..." : "Register"}
             </button>
-
             <button
               type="button"
               onClick={() => handleSocialLogin(signInWithGoogle, "Google")}
@@ -247,7 +198,6 @@ const Register = () => {
             >
               <FcGoogle size={24} /> Sign up with Google
             </button>
-
             <button
               type="button"
               onClick={() => handleSocialLogin(signInWithGithub, "GitHub")}
@@ -255,7 +205,6 @@ const Register = () => {
             >
               <FaGithub size={24} /> Sign up with GitHub
             </button>
-
             <p className="text-center mt-4 text-gray-600">
               Already have an account?{" "}
               <Link
