@@ -4,62 +4,70 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Login/Register";
 import Dashboard from "../Layout/Dashboard";
-import Cart from "../pages/Dashboard/Cart/Cart";
+
 import Employee from "../pages/Dashboard/Employee/Employee";
 import Admin from "../pages/Dashboard/Admin/Admin";
-import Hr from "../pages/Dashboard/HR/hr";
+
 import Finance from "../pages/Dashboard/Finance/Finance";
 import Reports from "../pages/Dashboard/Reports/Reports";
+import Hr from "../pages/Dashboard/HR/Hr";
+import AllUser from "../pages/Dashboard/Users/AllUser";
+import Cart from "../pages/Dashboard/Cart/Cart";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main/>,
+    element: <Main />,
     children: [
-        {
-            path: "/",
-            element: <Home/>,
-        },
-        {
-          path: "/login",
-          element: <Login/>
-        },
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
 
-
-        {
-          path: "/register",
-          element: <Register/>,
-        }
-    ]
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ],
   },
   {
-    path: 'dashboard',
-    element: <Dashboard/>,
+    path: "dashboard",
+    element: <Dashboard />,
     children: [
+      // admin
       {
-        path: 'cart',
-        element: <Cart/>,
+        path: "cart",
+        element: <Cart />,
       },
       {
-        path: 'employee',
-        element: <Employee/>,
+        path: "users",
+        element: <AllUser />,
       },
       {
-        path: 'hr',
-        element: <Hr/>,
+        path: "admin",
+        element: <Admin />,
       },
       {
-        path: 'admin',
-        element: <Admin/>,
+        path: "employee",
+        element: <Employee />,
       },
       {
-        path: 'finance',
-        element: <Finance/>,
+        path: "hr",
+        element: <Hr />,
+      },
+
+      {
+        path: "finance",
+        element: <Finance />,
       },
       {
-        path: 'reports',
-        element: <Reports/>,
+        path: "reports",
+        element: <Reports />,
       },
-    ]
-  }
+    ],
+  },
 ]);

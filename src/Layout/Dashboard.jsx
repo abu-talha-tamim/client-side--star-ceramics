@@ -8,10 +8,12 @@ import {
   FaFileInvoiceDollar,
   FaChartLine,
   FaCogs,
+  FaUser,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
+  const isAdmin = true;
   return (
     <div className="flex min-h-screen bg-gray-200">
       {/* Sidebar */}
@@ -21,6 +23,94 @@ const Dashboard = () => {
         </h2>
 
         <ul className="space-y-3">
+          {isAdmin ? (
+            <>
+              {/* Admin Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/admin"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaUserShield /> All-Employee
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/users"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaUser /> All Users
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <>
+              {" "}
+              {/* HR Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/hr"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaDesktop /> HR Dashboard
+                </NavLink>
+              </li>
+              {/* Reports Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/reports"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaChartLine /> Reports & Analytics
+                </NavLink>
+              </li>
+              {/* Finance Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/finance"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaFileInvoiceDollar /> Finance Panel
+                </NavLink>
+              </li>
+              {/* Employee Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/employee"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaUsers /> Employee Panel
+                </NavLink>
+              </li>
+            </>
+          )}
+          {/* Divider before last three sections */}
+          <div className="border-t border-gray-700 my-3"></div>
+
           {/* Home */}
           <li>
             <NavLink
@@ -32,84 +122,6 @@ const Dashboard = () => {
               }
             >
               <FaHome /> Home
-            </NavLink>
-          </li>
-
-          {/* Employee Section */}
-         
-          <li>
-            <NavLink
-              to="/dashboard/employee"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <FaUsers /> Employee Panel
-            </NavLink>
-          </li>
-
-          {/* HR Section */}
-         
-          <li>
-            <NavLink
-              to="/dashboard/hr"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <FaDesktop /> HR Dashboard
-            </NavLink>
-          </li>
-
-          {/* Admin Section */}
-          
-          <li>
-            <NavLink
-              to="/dashboard/admin"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <FaUserShield /> Admin Panel
-            </NavLink>
-          </li>
-
-          {/* Finance Section */}
-          
-          <li>
-            <NavLink
-              to="/dashboard/finance"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <FaFileInvoiceDollar /> Finance Panel
-            </NavLink>
-          </li>
-
-          {/* Divider before last three sections */}
-          <div className="border-t border-gray-700 my-3"></div>
-
-          {/* Reports Section */}
-          
-          <li>
-            <NavLink
-              to="/dashboard/reports"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <FaChartLine /> Reports & Analytics
             </NavLink>
           </li>
 
@@ -140,6 +152,18 @@ const Dashboard = () => {
               }
             >
               <FaShoppingCart /> My Cart
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard/contact"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                  isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                }`
+              }
+            >
+              <FaShoppingCart /> Contact
             </NavLink>
           </li>
         </ul>

@@ -92,9 +92,16 @@ const Register = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const photoURL = data.photo?.[0]
-        ? await uploadImageToImgbb(data.photo[0])
-        : "";
+      let photoURL = "";
+
+      if (data.photo?.[0]) {
+        photoURL = await uploadImageToImgbb(data.photo[0]);
+      }
+
+      if (!photoURL) {
+        throw new Error("Image upload failed, please try again.");
+      }
+
       const userData = {
         name: data.name,
         email: data.email,
@@ -102,7 +109,7 @@ const Register = () => {
         bank_account_no: data.bank_account_no,
         salary: Number(data.salary),
         designation: data.designation,
-        photo: photoURL,
+        photo: photoURL, // Ensure image is stored
         registeredAt: new Date().toISOString(),
       };
 
@@ -110,10 +117,12 @@ const Register = () => {
       if (!userCredential) {
         throw new Error("User creation failed");
       }
+
       const response = await axiosPublic.post("/users", userData);
       if (!response.data?.insertedId) {
         throw new Error("Failed to insert user in database");
       }
+
       await updateUserProfile(data.name, photoURL);
       reset();
       Swal.fire({
