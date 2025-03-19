@@ -14,6 +14,7 @@ import Hr from "../pages/Dashboard/HR/Hr";
 import AllUser from "../pages/Dashboard/Users/AllUser";
 import Cart from "../pages/Dashboard/Cart/Cart";
 
+import PrivateRoute from "./PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -36,7 +37,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <Dashboard />,
+    element: <PrivateRoute><Dashboard /></PrivateRoute>,
     children: [
       // admin
       {
