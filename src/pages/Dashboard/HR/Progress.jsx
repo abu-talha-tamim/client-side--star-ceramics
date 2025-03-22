@@ -18,6 +18,7 @@ const Progress = () => {
   const fetchWorkLogs = async () => {
     try {
       const response = await axiosPublic.get("/employWork");
+      setWorkLogs(response.data.reverse());
       setWorkLogs(response.data);
       setFilteredLogs(response.data);
 

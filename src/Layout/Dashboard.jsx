@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  FaDesktop,
   FaHome,
   FaUsers,
   FaUserShield,
@@ -11,7 +10,7 @@ import {
   FaUser,
   FaMailBulk,
   FaListUl,
-  FaPray,
+  FaBars,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../hook/useAdmin";
@@ -40,6 +39,19 @@ const Dashboard = () => {
                   }
                 >
                   <FaUserShield /> All-Employee
+                </NavLink>
+              </li>
+              {/* Finance Section */}
+              <li>
+                <NavLink
+                  to="/dashboard/finance"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaFileInvoiceDollar /> Admin-payroll
                 </NavLink>
               </li>
               <li>
@@ -80,7 +92,7 @@ const Dashboard = () => {
                     }`
                   }
                 >
-                  <FaPray /> progress
+                  <FaBars /> progress
                 </NavLink>
               </li>
               {/* Reports Section */}
@@ -94,19 +106,6 @@ const Dashboard = () => {
                   }
                 >
                   <FaChartLine /> reports
-                </NavLink>
-              </li>
-              {/* Finance Section */}
-              <li>
-                <NavLink
-                  to="/dashboard/finance"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
-                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
-                    }`
-                  }
-                >
-                  <FaFileInvoiceDollar /> Finance Panel
                 </NavLink>
               </li>
               {/* Employee Section */}
