@@ -15,10 +15,9 @@ import useAxiosPublic from "../hook/useAxiosPublic";
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-
 const AuthProvider = ({ children }) => {
+  const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
@@ -71,11 +70,12 @@ const AuthProvider = ({ children }) => {
         axiosPublic.post("/jwt", userInfo).then((res) => {
           if (res.data) {
             localStorage.setItem("access-token", res.data.token);
+            setLoading(false);
           }
         });
       } else {
         //  TODO: remove token
-        localStorage.removeItem('access-token');
+        localStorage.removeItem("access-token");
       }
       setLoading(false);
     });

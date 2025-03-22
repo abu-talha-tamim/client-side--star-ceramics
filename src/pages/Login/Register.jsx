@@ -167,6 +167,51 @@ const Register = () => {
               )}
             </div>
             <div>
+              <label
+                htmlFor="email"
+                className="block text-gray-700 font-medium"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                {...register("email", { required: "Email is required" })}
+                id="email"
+                placeholder="Enter your email"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Password
+              </label>
+              <input
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                  pattern: {
+                    value: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/,
+                    message:
+                      "Password must include an uppercase letter and a number",
+                  },
+                })}
+                className="input-field"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <div>
               <label htmlFor="role" className="block text-gray-700 font-medium">
                 Role
               </label>
@@ -178,6 +223,56 @@ const Register = () => {
                 <option value="Employee">Employee</option>
                 <option value="HR">HR</option>
               </select>
+            </div>
+            <div>
+              <label
+                htmlFor="designation"
+                className="block text-gray-700 font-medium"
+              >
+                Designation
+              </label>
+              <input
+                type="text"
+                {...register("designation", {
+                  required: "Designation is required",
+                })}
+                id="designation"
+                placeholder="Enter your designation"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="bank_account_no"
+                className="block text-gray-700 font-medium"
+              >
+                Bank Account Number
+              </label>
+              <input
+                type="text"
+                {...register("bank_account_no", {
+                  required: "Bank account number is required",
+                })}
+                id="bank_account_no"
+                placeholder="Enter your bank account number"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="salary"
+                className="block text-gray-700 font-medium"
+              >
+                Salary
+              </label>
+              <input
+                type="number"
+                {...register("salary", { required: "Salary is required" })}
+                id="salary"
+                placeholder="Enter your salary"
+                className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
             </div>
             <div>
               <label

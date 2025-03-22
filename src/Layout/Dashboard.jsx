@@ -9,6 +9,9 @@ import {
   FaChartLine,
   FaCogs,
   FaUser,
+  FaMailBulk,
+  FaListUl,
+  FaPray,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../hook/useAdmin";
@@ -65,7 +68,19 @@ const Dashboard = () => {
                     }`
                   }
                 >
-                  <FaDesktop /> HR Dashboard
+                  <FaListUl /> Employee-list
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/progress"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-3 rounded-lg transition duration-300 ${
+                      isActive ? "bg-blue-700" : "hover:bg-gray-700"
+                    }`
+                  }
+                >
+                  <FaPray /> progress
                 </NavLink>
               </li>
               {/* Reports Section */}
@@ -78,7 +93,7 @@ const Dashboard = () => {
                     }`
                   }
                 >
-                  <FaChartLine /> Reports & Analytics
+                  <FaChartLine /> reports
                 </NavLink>
               </li>
               {/* Finance Section */}
@@ -104,7 +119,7 @@ const Dashboard = () => {
                     }`
                   }
                 >
-                  <FaUsers /> Employee Panel
+                  <FaUsers /> Employee work-sheet
                 </NavLink>
               </li>
             </>
@@ -164,7 +179,7 @@ const Dashboard = () => {
                 }`
               }
             >
-              <FaShoppingCart /> Contact
+              <FaMailBulk /> Contact Us
             </NavLink>
           </li>
         </ul>

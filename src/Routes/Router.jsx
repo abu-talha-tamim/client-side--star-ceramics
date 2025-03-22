@@ -10,11 +10,12 @@ import Admin from "../pages/Dashboard/Admin/Admin";
 
 import Finance from "../pages/Dashboard/Finance/Finance";
 import Reports from "../pages/Dashboard/Reports/Reports";
-import Hr from "../pages/Dashboard/HR/Hr";
+// import Hr from "../pages/Dashboard/HR/Hr";
 import AllUser from "../pages/Dashboard/Users/AllUser";
 import Cart from "../pages/Dashboard/Cart/Cart";
 
 import PrivateRoute from "./PrivateRoute";
+import Progress from "../pages/Dashboard/HR/Progress";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -56,9 +57,13 @@ export const router = createBrowserRouter([
         path: "employee",
         element: <Employee />,
       },
+      // {
+      //   path: "hr",
+      //   element: <Hr />,
+      // },
       {
-        path: "hr",
-        element: <Hr />,
+        path: "progress",
+        element: <Progress/>,
       },
 
       {
