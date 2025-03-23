@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import useAxios from "../../../hook/useAxious";
+
 import Swal from "sweetalert2";
+import useAxios from "../../../hook/useAxious";
 
 const Admin = () => {
   const axiosSecure = useAxios();
