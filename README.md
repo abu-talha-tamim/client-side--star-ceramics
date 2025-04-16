@@ -48,18 +48,18 @@ Welcome to **Star-T**, a modern Employee Management System built with **React**,
 📁 React Project Folder Structure
 employee-payroll-client/
 │
-├── 📁 public/                   # Static assets
-│   └── index.html              # HTML template
+├── 📁 public/                
+│   └── index.html              
 │
 ├── 📁 src/
-│   ├── 📁 assets/              # Images, icons, logos, etc.
+│   ├── 📁 assets/              
 │   │
-│   ├── 📁 components/          # Reusable UI components
+│   ├── 📁 components/          
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
 │   │   └── ProtectedRoute.jsx
 │   │
-│   ├── 📁 pages/               # Page-level components
+│   ├── 📁 pages/               
 │   │   ├── Home/
 │   │   │   └── Home.jsx
 │   │   ├── Login/
@@ -78,37 +78,37 @@ employee-payroll-client/
 │   │   │       └── ManageRoles.jsx
 │   │   └── NotFound.jsx
 │   │
-│   ├── 📁 layout/              # Layouts for dashboard or public site
+│   ├── 📁 layout/              
 │   │   ├── MainLayout.jsx
 │   │   └── DashboardLayout.jsx
 │   │
-│   ├── 📁 hooks/               # Custom hooks
+│   ├── 📁 hooks/               
 │   │   ├── useAuth.js
 │   │   ├── useAxios.js
 │   │   └── useAxiosPublic.js
 │   │
-│   ├── 📁 context/             # Context providers
+│   ├── 📁 context/            
 │   │   └── AuthProvider.jsx
 │   │
-│   ├── 📁 router/              # Routing setup
+│   ├── 📁 router/              
 │   │   └── routes.jsx
 │   │
-│   ├── 📁 utils/               # Utility functions
+│   ├── 📁 utils/               
 │   │   └── formatDate.js
 │   │
-│   ├── App.jsx                # Root App component
-│   ├── main.jsx               # App entry point
-│   └── index.css              # Tailwind & custom styles
+│   ├── App.jsx              
+│   ├── main.jsx               
+│   └── index.css              
 │
-├── .env                       # Environment variables
+├── .env                       
 ├── .gitignore
 ├── tailwind.config.js
 ├── postcss.config.js
-├── vite.config.js             # If using Vite
+├── vite.config.js           
 └── package.json
 
 
-## 📁 Project Structure
+
 
 🧪 Future Features
 ✅ Employee Dashboard
