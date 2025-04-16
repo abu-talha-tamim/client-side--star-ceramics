@@ -45,6 +45,69 @@ Welcome to **Star-T**, a modern Employee Management System built with **React**,
 
 ---
 
+📁 React Project Folder Structure
+employee-payroll-client/
+│
+├── 📁 public/                   # Static assets
+│   └── index.html              # HTML template
+│
+├── 📁 src/
+│   ├── 📁 assets/              # Images, icons, logos, etc.
+│   │
+│   ├── 📁 components/          # Reusable UI components
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   └── ProtectedRoute.jsx
+│   │
+│   ├── 📁 pages/               # Page-level components
+│   │   ├── Home/
+│   │   │   └── Home.jsx
+│   │   ├── Login/
+│   │   │   └── Login.jsx
+│   │   ├── Register/
+│   │   │   └── Register.jsx
+│   │   ├── Dashboard/
+│   │   │   ├── Employee/
+│   │   │   │   ├── TaskLog.jsx
+│   │   │   │   └── PaymentHistory.jsx
+│   │   │   ├── HR/
+│   │   │   │   ├── VerifyEmployees.jsx
+│   │   │   │   ├── ManagePayroll.jsx
+│   │   │   │   └── Finance.jsx
+│   │   │   └── Admin/
+│   │   │       └── ManageRoles.jsx
+│   │   └── NotFound.jsx
+│   │
+│   ├── 📁 layout/              # Layouts for dashboard or public site
+│   │   ├── MainLayout.jsx
+│   │   └── DashboardLayout.jsx
+│   │
+│   ├── 📁 hooks/               # Custom hooks
+│   │   ├── useAuth.js
+│   │   ├── useAxios.js
+│   │   └── useAxiosPublic.js
+│   │
+│   ├── 📁 context/             # Context providers
+│   │   └── AuthProvider.jsx
+│   │
+│   ├── 📁 router/              # Routing setup
+│   │   └── routes.jsx
+│   │
+│   ├── 📁 utils/               # Utility functions
+│   │   └── formatDate.js
+│   │
+│   ├── App.jsx                # Root App component
+│   ├── main.jsx               # App entry point
+│   └── index.css              # Tailwind & custom styles
+│
+├── .env                       # Environment variables
+├── .gitignore
+├── tailwind.config.js
+├── postcss.config.js
+├── vite.config.js             # If using Vite
+└── package.json
+
+
 ## 📁 Project Structure
 
 🧪 Future Features
