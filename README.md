@@ -1,6 +1,64 @@
 # React + Vite
+Live link : https://star-ceramics-e6940.web.app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+# ⭐ Star-T | Employee Management System
+
+Welcome to **Star-T**, a modern Employee Management System built with **React**, **Firebase Authentication**, **Express**, and **MongoDB**. This system allows employee registration, login (email/password and social login), and role-based access control for Employees, HR, and Admin.
+
+## ✨ Features
+
+- 🔐 **Authentication**
+  - Email/Password login
+  - Google and GitHub social login
+- 🧑‍💼 **User Roles**
+  - Role-based interface: Employee, HR, Admin
+  - Default role: Employee
+- 💾 **Database Integration**
+  - Stores user info in MongoDB upon login/registration
+  - Prevents duplicate entries
+- 📋 **User Info Fields**
+  - Name, email, photo, role, salary, account number, designation, registration date
+- ⚙️ **Routing & Navigation**
+  - Protected routes using React Router
+  - Redirects to the last visited page after login
+- 📦 **Modern Stack**
+  - React + Tailwind CSS
+  - Firebase Auth
+  - Axios + Express
+  - MongoDB (via custom REST API)
+
+---
+
+## 🚀 Tech Stack
+
+| Technology     | Description                          |
+|----------------|--------------------------------------|
+| React          | Frontend framework                   |
+| Firebase Auth  | User authentication system           |
+| Express.js     | Backend server and API               |
+| MongoDB        | NoSQL database to store user data    |
+| Tailwind CSS   | UI design and styling                |
+| Axios          | HTTP client to communicate with API  |
+| React Router   | Client-side routing                  |
+| SweetAlert2    | Beautiful pop-up messages            |
+
+---
+
+## 📁 Project Structure
+
+🧪 Future Features
+✅ Employee Dashboard
+
+✅ HR Panel with Salary Management
+
+✅ Admin Controls (User management)
+
+🔄 Monthly Reports
+
+📊 Performance Tracking
+
+📁 Upload Documents
 
 Currently, two official plugins are available:
 
